@@ -1,0 +1,44 @@
+OrderDate,Region,Rep1,Rep2,Item,Units,UnitCost,Total
+1/6/2019,East,Jones,Sharell,Pencil,95,2.39,189.05.00
+1/23/2019,Central,Kivell,Francisca,Binder,50,20.39,999.5
+2/9/2019,Central,Jardine,Gregg,Pencil,36,5.39,180.04.00
+2/26/2019,Central,Gill,Wendie,Pen,27,20.39,540.13.00
+3/15/2019,West,Sorvino,Miles,Pencil,56,3.39,167.44.00
+4/1/2019,East,Jones,Jeana,Binder,60,5.39,299.4
+4/18/2019,Central,Andrews,Daine,Pencil,75,2.39,149.25.00
+5/5/2019,Central,Jardine,Arnita,Pencil,90,5.39,449.1
+5/22/2019,West,Thompson,Lorine,Pencil,32,2.39,64.08.00
+6/8/2019,East,Jones,Vivan,Binder,60,9.39,539.4
+6/25/2019,Central,Morgan,Ernest,Pencil,90,5.39,449.1
+7/12/2019,East,Howard,Flo,Binder,29,2.39,58.11.00
+7/29/2019,East,Parent,Lilli,Binder,81,20.39,"1,619.19"
+8/15/2019,East,Jones,Kristyn,Pencil,35,5.39,175.05.00
+9/1/2019,Central,Smith,Tashina,Desk,2,125,250
+9/18/2019,East,Jones,Maryann,Pen Set,16,16.39,256.24.00
+10/5/2019,Central,Morgan,Nicolas,Binder,28,9.39,252.12.00
+10/22/2019,East,Jones,Donn,Pen,64,9.39,575.36.00
+11/8/2019,East,Parent,Arlie,Pen,15,20.39,300.25.00
+11/25/2019,Central,Kivell,Jade,Pen Set,96,5.39,479.04.00
+12/12/2019,Central,Smith,Jenifer,Pencil,67,1.29,86.43.00
+12/29/2019,East,Parent,Meghan,Pen Set,74,16.39,"1,183.26"
+1/15/2020,Central,Gill,Margert,Binder,46,9.39,413.54.00
+2/1/2020,Central,Smith,Danuta,Binder,87,15,"1,305.00"
+2/18/2020,East,Jones,Lilliam,Binder,4,5.39,20.36
+3/7/2020,West,Sorvino,Judi,Binder,7,20.39,140.33.00
+3/24/2020,Central,Jardine,Kimiko,Pen Set,50,5.39,249.5
+4/10/2020,Central,Andrews,Alpha,Pencil,66,2.39,131.34.00
+4/27/2020,East,Howard,,Pen,96,5.39,479.04.00
+5/14/2020,Central,Gill,Ronnie,Pencil,53,1.29,68.37.00
+5/31/2020,Central,Gill,Janean,Binder,80,9.39,719.2
+6/17/2020,Central,Kivell,Maxwell,Desk,5,125,625
+7/4/2020,East,Jones,Joaquin,Pen Set,62,5.39,309.38.00
+7/21/2020,Central,Morgan,Britni,Pen Set,55,12.49,687.35.00
+8/7/2020,Central,Kivell,Katheleen,Pen Set,42,24.35.00,"1,005.90"
+8/24/2020,West,Sorvino,Franklin,Desk,3,275,825
+9/10/2020,Central,Gill,Norine,Pencil,7,1.29,9.03
+9/27/2020,West,Sorvino,Mario,Pen,76,2.39,151.24.00
+10/14/2020,West,Thompson,Morgan,Binder,57,20.39,"1,139.43"
+10/31/2020,Central,Andrews,Kivell,Pencil,14,1.29,18.06
+11/17/2020,Central,Jardine,Brianna,Binder,11,5.39,55.29.00
+12/4/2020,Central,Jardine,Margert,Binder,94,20.39,"1,879.06"
+12/21/2020,Central,Andrews,Danuta,Binder,28,5.39,
