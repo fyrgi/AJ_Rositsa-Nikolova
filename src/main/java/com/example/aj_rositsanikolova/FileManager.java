@@ -17,6 +17,8 @@ public class FileManager {
     private static ArrayList<String> columnFileValues = new ArrayList<>();
     private static ArrayList<String> dataFileValues = new ArrayList<>();
     private static Scanner scanner;
+
+    private static int rows = 0;
     private static File url = new File("src/Files/sample.csv");
     private int totalCol, totalRow;
 
@@ -26,7 +28,7 @@ public class FileManager {
             File file = new File("src/Files/sample.csv");
 
             scanner = new Scanner(file);
-            int rows = 0, cols = 0, commas = 0;
+            int cols = 0, commas = 0;
             boolean foundFirst = false;
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
@@ -52,9 +54,9 @@ public class FileManager {
                 columnFileValues.add(allFileValues.get(i));
                 dataFileValues.remove(0);
             }
-            System.out.println("all file values "+ allFileValues);
-            System.out.println("dataFileValues "+ dataFileValues);
-            System.out.println("Column values " + columnFileValues);
+            //System.out.println("all file values "+ allFileValues);
+            //System.out.println("dataFileValues "+ dataFileValues);
+            //System.out.println("Column values " + columnFileValues);
             /*for (String s : allFileValues) {
                 System.out.println("5: "+s);
             }*/
@@ -182,5 +184,9 @@ public class FileManager {
 
     public static ArrayList<String> getDataFileValues() {
         return dataFileValues;
+    }
+
+    public static int getRows() {
+        return rows;
     }
 }
