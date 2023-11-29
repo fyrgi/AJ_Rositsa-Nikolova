@@ -1,31 +1,36 @@
 package com.example.aj_rositsanikolova;
+
 import com.eclipsesource.json.*;
 import javafx.stage.FileChooser;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
 //import static com.example.aj_rositsanikolova.HelloApplication.scene;
-import static com.example.aj_rositsanikolova.HelloApplication.stage;
+
 
 public class FileManager {
 
-
-    public static ArrayList<String> aryL = new ArrayList<>();
-    public static Scanner scanner;
+    private static ArrayList<String> allFileValues = new ArrayList<>();
+    private static ArrayList<String> columnFileValues = new ArrayList<>();
+    private static ArrayList<String> dataFileValues = new ArrayList<>();
+    private static Scanner scanner;
+    private static File url = new File("src/Files/sample.csv");
     private int totalCol, totalRow;
+
     public static void readCSVFile() {
-        String[][] array2d = new String[3][11];
         try {
+
             File file = new File("src/Files/sample.csv");
+
             scanner = new Scanner(file);
             int rows = 0, cols = 0, commas = 0;
             boolean foundFirst = false;
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
+                rows++;
                 if(!foundFirst){
                     for(int i = 0; i < line.length(); i++){
                         if(line.charAt(i)==',')
@@ -35,17 +40,25 @@ public class FileManager {
                     foundFirst = true;
                 }
                 String[] array = line.split(",", cols);
-                aryL.addAll(Arrays.asList(array));
-                System.out.println("1: "+array[0]);
+                allFileValues.addAll(Arrays.asList(array));
+                /*System.out.println("1: "+array[0]);
                 System.out.println("2: "+Arrays.deepToString(array));
-                System.out.println("3: "+line);
-            }
-            System.out.println("4: "+aryL);
-
-            for (String s : aryL) {
-                System.out.println("5: "+s);
+                System.out.println("3: "+line);*/
             }
             scanner.close();
+
+            dataFileValues.addAll(allFileValues);
+            for(int i = 0; i < cols; i++){
+                columnFileValues.add(allFileValues.get(i));
+                dataFileValues.remove(0);
+            }
+            System.out.println("all file values "+ allFileValues);
+            System.out.println("dataFileValues "+ dataFileValues);
+            System.out.println("Column values " + columnFileValues);
+            /*for (String s : allFileValues) {
+                System.out.println("5: "+s);
+            }*/
+
         } catch (Exception e) {
             System.out.println("ERROR" + e.toString());
         }
@@ -90,10 +103,37 @@ public class FileManager {
     } */
     public static void readJsonFile() {
         try {
-            File file = new File("src/Files/sample.csv");
+            File file = new File("src/Files/sample.json");
             scanner = new Scanner(file);
             String page = "";
             while (scanner.hasNext()) {
+                String line = scanner.nextLine();
+                //System.out.println(line);
+                page += line;
+                // System.out.println(line.length());
+            }
+            scanner.close();
+            System.out.println(page);
+            JsonValue jv = Json.parse(page);
+            JsonArray ja = jv.asArray();
+
+            JsonObject jo = ja.get(0).asObject();
+            System.out.println(jo.names().size());
+            for (int i = 0; i < ja.size() - 1; i++) {
+                JsonObject j = ja.get(i).asObject();
+                System.out.println(j);
+                /*System.out.println(j.get("B"));
+                System.out.println(j.get("C"));
+                System.out.println(j.get("D"));
+                System.out.println(j.get("F"));
+                System.out.println(j.get("G"));
+                System.out.println(j.get("H"));*/
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR" + e.toString());
+        }
+    }
+            /*while (scanner.hasNext()) {
                 String line = scanner.nextLine();
                 //System.out.println(line);
                 page += line;
@@ -106,12 +146,14 @@ public class FileManager {
             System.out.println(jo.names().size());
             for(int i = 0; i <ja.size()-1; i++){
                 JsonObject j = ja.get(i).asObject();
-                //System.out.println(j.get(i));
+                System.out.println(j.get("Item"));
+                System.out.println(j.get("Amount per unit"));
+                System.out.println(j.get("Total amount"));
             }
         } catch (Exception e) {
             System.out.println("ERROR" + e.toString());
-        }
-    }
+        }*/
+
 
     public static void onFileChosen(){
         FileChooser fc = new FileChooser();
@@ -120,13 +162,25 @@ public class FileManager {
         fc.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("CSV", "*.csv"),
                 new FileChooser.ExtensionFilter("JSON", "*.json"),
-                new FileChooser.ExtensionFilter("XML", "*.xml")
+                new FileChooser.ExtensionFilter("XML", "*.xml"),
+                new FileChooser.ExtensionFilter("ALL FILES", "*.*")
         );
-        //File file = fc.showOpenMultipleDialog(scene.getWindow());
-        //hela filen is returned
-        //File selectedFile = fc.showOpenDialog(stage.getStage().getWindow());
-        //if (selectedFile != null) {
-        //    System.out.println("file");
-        //}
+        File selectedFile = fc.showOpenDialog(null);
+        if (selectedFile != null) {
+            url = selectedFile;
+        } else {
+        }
+    }
+
+    public static ArrayList<String> getAllFileValues() {
+        return allFileValues;
+    }
+
+    public static ArrayList<String> getColumnFileValues() {
+        return columnFileValues;
+    }
+
+    public static ArrayList<String> getDataFileValues() {
+        return dataFileValues;
     }
 }

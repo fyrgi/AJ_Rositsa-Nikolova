@@ -2,10 +2,9 @@ package com.example.aj_rositsanikolova;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-public class HelloController {
+public class ApplicationController {
     @FXML
     private Label welcomeText;
     @FXML
@@ -16,6 +15,8 @@ public class HelloController {
     protected void onCsvBtnClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
         FileManager.readCSVFile();
+        Table table = new Table();
+        table.start(new Stage());
     }
     @FXML
     protected void onJsonBtnClick() {
