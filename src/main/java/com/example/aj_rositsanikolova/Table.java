@@ -18,48 +18,46 @@ import javafx.util.Callback;
 
 import java.util.ArrayList;
 
-public class Table extends Application {
+public class Table{
 
-        private TableView<ObservableList<StringProperty>> table = new TableView();
-        public static void main(String[] args) {
-            launch(args);
-        }
-        private ArrayList<String> columnNames = FileManager.getColumnFileValues();
-        private ArrayList<String> rowData = FileManager.getDataFileValues();
-        @Override
-        public void start(Stage stage) {
-            Scene scene = new Scene(new Group());
-            stage.setTitle("Read file");
-            //TODO write the filename?
-            final Label label = new Label("File Name");
-            label.setFont(new Font("Arial", 20));
+    private TableView<ObservableList<StringProperty>> table = new TableView();
 
-            table.setEditable(true);
+    private ArrayList<String> columnNames = FileManager.getColumnFileValues();
+    private ArrayList<String> rowData = FileManager.getDataFileValues();
 
-            for (int column = 0; column < columnNames.size(); column++){
-                table.getColumns().add(createColumn(column, columnNames.get(column)));}
-            int rows = 0;
-            while(rows < FileManager.getRows()-1) {
-                // Add data to table:
-                ObservableList<StringProperty> data = FXCollections.observableArrayList();
-                for (String value : rowData)
-                    data.add(new SimpleStringProperty(value));
-                table.getItems().add(data);
-                rows++;
-                if(!rowData.isEmpty()) {
-                    for (int i = 0; i < columnNames.size(); i++) {
-                        rowData.remove(0);
-                    }
+    public void start(Stage stage) {
+        Scene scene = new Scene(new Group());
+        stage.setTitle("Read file");
+        //TODO write the filename?
+        final Label label = new Label("File Name");
+        label.setFont(new Font("Arial", 20));
+        table.setEditable(true);
+        for (int column = 0; column < columnNames.size(); column++){
+            table.getColumns().add(createColumn(column, columnNames.get(column)));}
+        int rows = 0;
+        while(rows < FileManager.getRows()) {
+            // Add data to table:
+            ObservableList<StringProperty> data = FXCollections.observableArrayList();
+            for (String value : rowData)
+                data.add(new SimpleStringProperty(value));
+            table.getItems().add(data);
+            rows++;
+            if(!rowData.isEmpty()) {
+                for (int i = 0; i < columnNames.size(); i++) {
+                    rowData.remove(0);
                 }
             }
-            final VBox vbox = new VBox();
-            vbox.setSpacing(5);
-            vbox.setPadding(new Insets(10, 0, 0, 10));
-            vbox.getChildren().addAll(label, table);
-            ((Group) scene.getRoot()).getChildren().addAll(vbox);
-            stage.setScene(scene);
-            stage.show();
         }
+        final VBox vbox = new VBox();
+        vbox.setSpacing(5);
+        vbox.setPadding(new Insets(20, 20, 20, 20));
+        vbox.getChildren().addAll(label, table);
+        ((Group) scene.getRoot()).getChildren().addAll(vbox);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    // add values to the cells. First we create the headers of the table and then fill each cell with its value.
     private TableColumn<ObservableList<StringProperty>, String> createColumn(final int columnIndex, String columnTitle){
         TableColumn<ObservableList<StringProperty>, String> column = new TableColumn<>();
         String title;

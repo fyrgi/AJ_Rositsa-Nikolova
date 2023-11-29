@@ -13,14 +13,10 @@ import java.util.Scanner;
 
 public class FileManager {
 
-    private static ArrayList<String> allFileValues = new ArrayList<>();
-    private static ArrayList<String> columnFileValues = new ArrayList<>();
-    private static ArrayList<String> dataFileValues = new ArrayList<>();
+    private static ArrayList<String> allFileValues = new ArrayList<>(), columnFileValues= new ArrayList<>(),dataFileValues = new ArrayList<>() ;
     private static Scanner scanner;
-
     private static int rows = 0;
     private static File url = new File("src/Files/sample.csv");
-    private int totalCol, totalRow;
     public static void readFile(File url){
         String ending = "";
         if(ending.equals("csv"))
@@ -34,6 +30,7 @@ public class FileManager {
         allFileValues.clear();
         columnFileValues.clear();
         dataFileValues.clear();
+        rows=0;
         try {
 
             File file = new File("src/Files/sample.csv");
@@ -49,9 +46,11 @@ public class FileManager {
                         if(line.charAt(i)==',')
                             commas++;
                     }
+                    rows--;
                     cols = commas + 1;
                     foundFirst = true;
                 }
+                System.out.println(rows);
                 String[] array = line.split(",", cols);
                 allFileValues.addAll(Arrays.asList(array));
                 /*System.out.println("1: "+array[0]);
@@ -115,11 +114,10 @@ public class FileManager {
         }
     } */
     public static void readJsonFile() {
-        allFileValues.clear();
         columnFileValues.clear();
         dataFileValues.clear();
         rows = 0;
-
+        allFileValues.clear();
         try {
             File file = new File("src/Files/sample.json");
             scanner = new Scanner(file);
@@ -136,13 +134,13 @@ public class FileManager {
             JsonObject jo = ja.get(0).asObject();
 
             columnFileValues.addAll(jo.names());
-
-            for (int i = 0; i < ja.size() - 1; i++) {
+            System.out.println(ja.size());
+            for (int i = 0; i < ja.size(); i++) {
                 JsonObject record = ja.get(i).asObject();
                 rows++;
+                System.out.println(record);
                 for(int j = 0; j < columnFileValues.size(); j++){
                     dataFileValues.add(String.valueOf(record.get(columnFileValues.get(j))));
-                    System.out.println(record.get(columnFileValues.get(j)));
                 }
             }
         } catch (Exception e) {
