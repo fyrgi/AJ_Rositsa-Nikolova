@@ -16,7 +16,6 @@ public class ApplicationController {
     protected void onCsvBtnClick() {
         welcomeText.setText("Welcome to JavaFX Application!");
         FileManager.readCSVFile();
-
         table.start(new Stage());
     }
     @FXML

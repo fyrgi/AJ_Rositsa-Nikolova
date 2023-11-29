@@ -30,14 +30,14 @@ public class Table extends Application {
         public void start(Stage stage) {
             Scene scene = new Scene(new Group());
             stage.setTitle("Read file");
-
+            //TODO write the filename?
             final Label label = new Label("File Name");
             label.setFont(new Font("Arial", 20));
 
             table.setEditable(true);
 
-            for (int column = 0; column < columnNames.size(); column++)
-                table.getColumns().add(createColumn(column, columnNames.get(column)));
+            for (int column = 0; column < columnNames.size(); column++){
+                table.getColumns().add(createColumn(column, columnNames.get(column)));}
             int rows = 0;
             while(rows < FileManager.getRows()-1) {
                 // Add data to table:

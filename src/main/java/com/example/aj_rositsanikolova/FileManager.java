@@ -21,8 +21,19 @@ public class FileManager {
     private static int rows = 0;
     private static File url = new File("src/Files/sample.csv");
     private int totalCol, totalRow;
-
+    public static void readFile(File url){
+        String ending = "";
+        if(ending.equals("csv"))
+            readCSVFile();
+        else if (ending.equals("json"))
+            readJsonFile();
+        else if (ending.equals("xml"))
+            readXmlFile();
+    }
     public static void readCSVFile() {
+        allFileValues.clear();
+        columnFileValues.clear();
+        dataFileValues.clear();
         try {
 
             File file = new File("src/Files/sample.csv");
@@ -104,6 +115,11 @@ public class FileManager {
         }
     } */
     public static void readJsonFile() {
+        allFileValues.clear();
+        columnFileValues.clear();
+        dataFileValues.clear();
+        rows = 0;
+
         try {
             File file = new File("src/Files/sample.json");
             scanner = new Scanner(file);
@@ -115,21 +131,19 @@ public class FileManager {
                 // System.out.println(line.length());
             }
             scanner.close();
-            System.out.println(page);
             JsonValue jv = Json.parse(page);
             JsonArray ja = jv.asArray();
-
             JsonObject jo = ja.get(0).asObject();
-            System.out.println(jo.names().size());
+
+            columnFileValues.addAll(jo.names());
+
             for (int i = 0; i < ja.size() - 1; i++) {
-                JsonObject j = ja.get(i).asObject();
-                System.out.println(j);
-                /*System.out.println(j.get("B"));
-                System.out.println(j.get("C"));
-                System.out.println(j.get("D"));
-                System.out.println(j.get("F"));
-                System.out.println(j.get("G"));
-                System.out.println(j.get("H"));*/
+                JsonObject record = ja.get(i).asObject();
+                rows++;
+                for(int j = 0; j < columnFileValues.size(); j++){
+                    dataFileValues.add(String.valueOf(record.get(columnFileValues.get(j))));
+                    System.out.println(record.get(columnFileValues.get(j)));
+                }
             }
         } catch (Exception e) {
             System.out.println("ERROR" + e.toString());
@@ -156,7 +170,9 @@ public class FileManager {
             System.out.println("ERROR" + e.toString());
         }*/
 
+    public static void readXmlFile(){
 
+    }
     public static void onFileChosen(){
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(new File("src")); //src znar kyde se namira / e za C
