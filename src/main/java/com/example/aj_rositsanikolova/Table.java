@@ -35,7 +35,7 @@ public class Table{
         saveBtn.idProperty().setValue("saveFile");
         label.setFont(new Font("Arial", 20));
         table.getColumns().clear();
-        table.setEditable(true);
+        table.setEditable(true); // Does not function because it is not implemented
         //Display the columns
         for (int column = 0; column < columnNames.size(); column++)
             table.getColumns().add(createColumn(column, columnNames.get(column)));
@@ -51,6 +51,9 @@ public class Table{
             //Removes the value that we just added to the table from the list.
             // Potential problem in case we don't have Header. Then columnNames might be faulty
             // most likely have to save data in FileManager.cols.
+
+            //I had another way to do the same thing but Java said that this way is better.
+            // For reference check older repo
             if(!rowData.isEmpty())
                 if (!columnNames.isEmpty()) {
                     rowData.subList(0, columnNames.size()).clear();
