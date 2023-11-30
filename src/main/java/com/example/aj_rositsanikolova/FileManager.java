@@ -17,17 +17,18 @@ public class FileManager {
     private static Scanner scanner;
     private static int rows = 0;
     private static File url;
-    public static void readFile(File url){
-        String fileExtention = url.getName().split("\\.")[1];
-        String ending = findExtention(url);
-        switch (ending){
+    public static void readFile(){
+        String fileExtension = findExtension();
+        switch (fileExtension){
             case "csv":
                 readCSVFile();
                 break;
             case "json":
                 readJsonFile();
+                break;
             default:
                 System.out.println("Can not read file");
+                break;
         }
     }
     public static void readCSVFile() {
@@ -152,32 +153,31 @@ public class FileManager {
         //TODO read XML?
     }
     public static void onFileChosen(){
-        System.out.println(url);
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(new File("src")); //src znar kyde se namira / e za C
         fc.setTitle("Open file");
         fc.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("ALL FILES", "*.*"),
                 new FileChooser.ExtensionFilter("CSV", "*.csv"),
                 new FileChooser.ExtensionFilter("JSON", "*.json"),
-                new FileChooser.ExtensionFilter("XML", "*.xml"),
-                new FileChooser.ExtensionFilter("ALL FILES", "*.*")
+                new FileChooser.ExtensionFilter("XML", "*.xml")
         );
         File selectedFile = fc.showOpenDialog(null);
         if (selectedFile != null) {
             url = selectedFile;
-            readFile(url);
+            readFile();
             Table table = new Table();
             table.start(new Stage());
             url = null;
         }
     }
     public void saveFile(File url){
-        String ex = findExtention(url);
+        String ex = findExtension();
         FileChooser fc = new FileChooser();
         //File selectedFile = fc.showSaveDialog();
     }
 
-    public static String findExtention(@org.jetbrains.annotations.NotNull File url){
+    public static String findExtension(){
         String[] dots = url.getName().split("\\.");
         return url.getName().split("\\.")[dots.length-1];
     }

@@ -18,13 +18,13 @@ public class ApplicationController {
     protected void onCsvBtnClick() {
         welcomeText.setText("Reading CSV file");
         FileManager.readCSVFile();
-        table.start(new Stage());
+        createResultTable();
     }
     @FXML
     protected void onJsonBtnClick() {
         welcomeText.setText("Reading JSON file");
         FileManager.readJsonFile();
-        table.start(new Stage());
+        createResultTable();
     }
     @FXML
     protected void onXmlBtnClick() {
@@ -33,5 +33,9 @@ public class ApplicationController {
     @FXML
     protected void onFileChosen() {
         FileManager.onFileChosen();
+    }
+    public void createResultTable(){
+        Table table = new Table();
+        table.start(new Stage());
     }
 }
