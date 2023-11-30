@@ -29,6 +29,7 @@ public class ApplicationController {
     @FXML
     protected void onXmlBtnClick() {
         //FileManager.onFileChosen();
+        FileManager.readXmlFile();
     }
     @FXML
     protected void onFileChosen() {

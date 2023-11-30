@@ -3,8 +3,14 @@ package com.example.aj_rositsanikolova;
 import com.eclipsesource.json.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+//import org.w3c.dom.Document;
+import org.w3c.dom.*;
+import org.xml.sax.SAXException;
 
+import javax.xml.parsers.*;
+import javax.xml.stream.XMLStreamException;
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
@@ -13,7 +19,8 @@ import java.util.Scanner;
 
 
 public class FileManager {
-    private static ArrayList<String> allFileValues = new ArrayList<>(), columnFileValues= new ArrayList<>(),dataFileValues = new ArrayList<>() ;
+    private static ArrayList<Integer> flaggedValues = new ArrayList<>();
+    private static ArrayList<String> columnFileValues= new ArrayList<>(), dataFileValues = new ArrayList<>() ;
     private static Scanner scanner;
     private static int rows = 0;
     private static File url;
@@ -32,7 +39,7 @@ public class FileManager {
         }
     }
     public static void readCSVFile() {
-        allFileValues.clear();
+        flaggedValues.clear();
         columnFileValues.clear();
         dataFileValues.clear();
         rows=0;
@@ -59,64 +66,27 @@ public class FileManager {
                     foundFirst = true;
                 }
                 if(line.split(",").length > cols){
-                    System.err.println("Error in data "+ Arrays.toString(line.split(",", cols)) + " on row: "+ rows);
+                    //System.err.println("Error in data "+ Arrays.toString(line.split(",", cols)) + " on row: "+ rows);
+                    flaggedValues.add(rows);
                 }
                 String[] array = line.split(",", cols);
-                allFileValues.addAll(Arrays.asList(array));
+                dataFileValues.addAll(Arrays.asList(array));
             }
             scanner.close();
-            dataFileValues.addAll(allFileValues);
             for(int i = 0; i < cols; i++){
-                columnFileValues.add(allFileValues.get(i));
+                columnFileValues.add(dataFileValues.get(i));
                 dataFileValues.remove(0);
             }
         } catch (Exception e) {
             System.out.println("ERROR" + e.toString());
         }
     }
-/*
-    public static void readJsonFileManuell(){
-        try {
 
-            // Trqbva da se napravi edin manuell parsing.
-            // kogato chetem pyrvata liniq moje da vzemem headera.
-            //zatova moje da napravim exceltion gore  za pyrviq zapis. Za da namerim
-            // za JSON e }, unikalno zashtoto zatvarq zapis. Izpolzva se za da razdelim zapisite.
-            // split kydeto namerim },
-            // Pyrviqt index index[0] ima header i values.
-            // vsemi headera i values i v posledstvie samo vlues.
-            // kato sme vzeli Header i values shte razdelqme po zapetaika.
-
-            File file = new File("src/Files/sample.json");
-            scanner = new Scanner(file);
-            String page = "";
-            while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                //System.out.println(line);
-                page += line;
-            }
-            scanner.close();
-            page.split("}");
-            String[] array = page.split("}");
-
-            //System.out.println(page);
-            //System.out.println(Arrays.deepToString(page.split("}")));
-            for(String s : page.split("}")){
-                System.out.println(s);
-            }
-            for(int i = 0; i < array.length; i++){
-            }
-            System.out.println(array[0]);
-
-        } catch (Exception e) {
-            System.out.println("ERROR" + e.toString());
-        }
-    } */
     public static void readJsonFile() {
         columnFileValues.clear();
         dataFileValues.clear();
         rows = 0;
-        allFileValues.clear();
+        flaggedValues.clear();
         try {
             File file;
             if(url != null){
@@ -128,9 +98,7 @@ public class FileManager {
             String page = "";
             while (scanner.hasNext()) {
                 String line = scanner.nextLine();
-                //System.out.println(line);
                 page += line;
-                // System.out.println(line.length());
             }
             scanner.close();
             JsonValue jv = Json.parse(page);
@@ -150,7 +118,70 @@ public class FileManager {
     }
 
     public static void readXmlFile(){
+        columnFileValues.clear();
+        dataFileValues.clear();
+        rows=0;
+        File file;
+        if(url != null){
+            file = new File(String.valueOf(url));
+        } else {
+            file = new File("src/Files/sample.xml");
+        }
+
         //TODO read XML?
+
+        // source https://stackoverflow.com/questions/61948901/java-get-tag-name-of-a-node
+        // special credits to https://youtu.be/2JH5YeQ68H8
+        try{
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document doc = builder.parse(file);
+            Element root = doc.getDocumentElement();
+
+            NodeList list = root.getChildNodes();
+            // Crazy way to get to the tagNames for the first record.
+            for(int j = 1; j < list.item(1).getChildNodes().getLength(); j+=2){
+                Node nodeArr = list.item(1).getChildNodes().item(j);
+                columnFileValues.add(nodeArr.getNodeName());
+            }
+            for (int i = 0; i < list.getLength(); i++){
+                Node node = list.item(i);
+                String[] findExtension = node.getNodeName().split(":");
+                // find the node name manual.
+                String nodeName = findExtension[0];
+                if(node.getNodeType() == Node.ELEMENT_NODE){
+                    for(int j = 0; j < columnFileValues.size(); j++){
+                        Element eElement = (Element) node;
+                        System.out.println("For "+columnFileValues.get(j)+ " we have "+ eElement.getAttribute(columnFileValues.get(j)));
+                    }
+                }
+            }
+
+           /* for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    for(int j = 1; j < list.item(1).getChildNodes().getLength(); j+=2){
+                        Node nodeArr = list.item(1).getChildNodes().item(j);
+                        columnFileValues.add(nodeArr.getNodeName());
+                    }
+                    String str = node.getTextContent();
+                    for(int j = 0; j < str.length(); j++){
+                        System.out.println("Char at "+j+" is "+ str.charAt(j));
+                    }
+                    dataFileValues.add(str);
+                }
+            }
+            for(String row : dataFileValues){
+            }*/
+
+        } catch (ParserConfigurationException e) {
+            throw new RuntimeException(e);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (SAXException e) {
+            throw new RuntimeException(e);
+        }
+
     }
     public static void onFileChosen(){
         FileChooser fc = new FileChooser();
@@ -182,8 +213,8 @@ public class FileManager {
         return url.getName().split("\\.")[dots.length-1];
     }
 
-    public static ArrayList<String> getAllFileValues() {
-        return allFileValues;
+    public static ArrayList<Integer> getFlaggedValues() {
+        return flaggedValues;
     }
 
     public static ArrayList<String> getColumnFileValues() {

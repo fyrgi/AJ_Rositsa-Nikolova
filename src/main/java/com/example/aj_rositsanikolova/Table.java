@@ -24,6 +24,7 @@ public class Table{
     private TableView<ObservableList<StringProperty>> table = new TableView();
     private ArrayList<String> columnNames = FileManager.getColumnFileValues();
     private ArrayList<String> rowData = FileManager.getDataFileValues();
+    private ArrayList<Integer> flaggedValues = FileManager.getFlaggedValues();
 
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
@@ -43,6 +44,13 @@ public class Table{
         // Get the rows of the table to iterate that many times and add the cell value.
         while(rows < FileManager.getRows()) {
             // Add data to table:
+            if(!flaggedValues.isEmpty()){
+                for(Integer row: flaggedValues){
+                    if(row==rows){
+                        System.err.println("Syvpadenie na red " + rows);
+                    }
+                }
+            }
             ObservableList<StringProperty> data = FXCollections.observableArrayList();
             for (String value : rowData)
                 data.add(new SimpleStringProperty(value));

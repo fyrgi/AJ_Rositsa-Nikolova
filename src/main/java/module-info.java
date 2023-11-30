@@ -3,6 +3,7 @@ module com.example.aj_rositsanikolova {
     requires javafx.fxml;
     requires minimal.json;
     requires org.jetbrains.annotations;
+    requires java.xml;
 
 
     opens com.example.aj_rositsanikolova to javafx.fxml;
