@@ -14,12 +14,11 @@ public class Application extends javafx.application.Application {
         super.init();
         stage = this;
     }
-
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(Application.class.getResource("menu-screen.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Hello World!");
+        stage.setTitle("Awesome file-reading program");
         stage.setScene(scene);
         stage.show();
     }

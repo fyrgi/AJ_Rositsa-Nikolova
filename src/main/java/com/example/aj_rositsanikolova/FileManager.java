@@ -2,6 +2,7 @@ package com.example.aj_rositsanikolova;
 
 import com.eclipsesource.json.*;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -12,19 +13,22 @@ import java.util.Scanner;
 
 
 public class FileManager {
-
     private static ArrayList<String> allFileValues = new ArrayList<>(), columnFileValues= new ArrayList<>(),dataFileValues = new ArrayList<>() ;
     private static Scanner scanner;
     private static int rows = 0;
-    private static File url = new File("src/Files/sample.csv");
+    private static File url;
     public static void readFile(File url){
-        String ending = "";
-        if(ending.equals("csv"))
-            readCSVFile();
-        else if (ending.equals("json"))
-            readJsonFile();
-        else if (ending.equals("xml"))
-            readXmlFile();
+        String fileExtention = url.getName().split("\\.")[1];
+        String ending = findExtention(url);
+        switch (ending){
+            case "csv":
+                readCSVFile();
+                break;
+            case "json":
+                readJsonFile();
+            default:
+                System.out.println("Can not read file");
+        }
     }
     public static void readCSVFile() {
         allFileValues.clear();
@@ -32,9 +36,12 @@ public class FileManager {
         dataFileValues.clear();
         rows=0;
         try {
-
-            File file = new File("src/Files/sample.csv");
-
+            File file;
+            if(url != null){
+                file = new File(String.valueOf(url));
+            } else {
+                file = new File("src/Files/sample.csv");
+            }
             scanner = new Scanner(file);
             int cols = 0, commas = 0;
             boolean foundFirst = false;
@@ -50,27 +57,18 @@ public class FileManager {
                     cols = commas + 1;
                     foundFirst = true;
                 }
-                System.out.println(rows);
+                if(line.split(",").length > cols){
+                    System.err.println("Error in data "+ Arrays.toString(line.split(",", cols)) + " on row: "+ rows);
+                }
                 String[] array = line.split(",", cols);
                 allFileValues.addAll(Arrays.asList(array));
-                /*System.out.println("1: "+array[0]);
-                System.out.println("2: "+Arrays.deepToString(array));
-                System.out.println("3: "+line);*/
             }
             scanner.close();
-
             dataFileValues.addAll(allFileValues);
             for(int i = 0; i < cols; i++){
                 columnFileValues.add(allFileValues.get(i));
                 dataFileValues.remove(0);
             }
-            //System.out.println("all file values "+ allFileValues);
-            //System.out.println("dataFileValues "+ dataFileValues);
-            //System.out.println("Column values " + columnFileValues);
-            /*for (String s : allFileValues) {
-                System.out.println("5: "+s);
-            }*/
-
         } catch (Exception e) {
             System.out.println("ERROR" + e.toString());
         }
@@ -119,7 +117,12 @@ public class FileManager {
         rows = 0;
         allFileValues.clear();
         try {
-            File file = new File("src/Files/sample.json");
+            File file;
+            if(url != null){
+                file = new File(String.valueOf(url));
+            } else {
+                file = new File("src/Files/sample.json");
+            }
             scanner = new Scanner(file);
             String page = "";
             while (scanner.hasNext()) {
@@ -132,13 +135,10 @@ public class FileManager {
             JsonValue jv = Json.parse(page);
             JsonArray ja = jv.asArray();
             JsonObject jo = ja.get(0).asObject();
-
             columnFileValues.addAll(jo.names());
-            System.out.println(ja.size());
             for (int i = 0; i < ja.size(); i++) {
                 JsonObject record = ja.get(i).asObject();
                 rows++;
-                System.out.println(record);
                 for(int j = 0; j < columnFileValues.size(); j++){
                     dataFileValues.add(String.valueOf(record.get(columnFileValues.get(j))));
                 }
@@ -147,31 +147,12 @@ public class FileManager {
             System.out.println("ERROR" + e.toString());
         }
     }
-            /*while (scanner.hasNext()) {
-                String line = scanner.nextLine();
-                //System.out.println(line);
-                page += line;
-            }
-            scanner.close();
-            JsonValue jv = Json.parse(page);
-            JsonArray ja = jv.asArray();
-            JsonObject jo = ja.get(0).asObject();
-            // kolko koloni imame
-            System.out.println(jo.names().size());
-            for(int i = 0; i <ja.size()-1; i++){
-                JsonObject j = ja.get(i).asObject();
-                System.out.println(j.get("Item"));
-                System.out.println(j.get("Amount per unit"));
-                System.out.println(j.get("Total amount"));
-            }
-        } catch (Exception e) {
-            System.out.println("ERROR" + e.toString());
-        }*/
 
     public static void readXmlFile(){
-
+        //TODO read XML?
     }
     public static void onFileChosen(){
+        System.out.println(url);
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(new File("src")); //src znar kyde se namira / e za C
         fc.setTitle("Open file");
@@ -184,8 +165,21 @@ public class FileManager {
         File selectedFile = fc.showOpenDialog(null);
         if (selectedFile != null) {
             url = selectedFile;
-        } else {
+            readFile(url);
+            Table table = new Table();
+            table.start(new Stage());
+            url = null;
         }
+    }
+    public void saveFile(File url){
+        String ex = findExtention(url);
+        FileChooser fc = new FileChooser();
+        //File selectedFile = fc.showSaveDialog();
+    }
+
+    public static String findExtention(@org.jetbrains.annotations.NotNull File url){
+        String[] dots = url.getName().split("\\.");
+        return url.getName().split("\\.")[dots.length-1];
     }
 
     public static ArrayList<String> getAllFileValues() {

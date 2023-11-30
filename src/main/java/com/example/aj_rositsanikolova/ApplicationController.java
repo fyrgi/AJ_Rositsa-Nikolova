@@ -4,6 +4,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public class ApplicationController {
     private Table table = new Table();
     @FXML
@@ -14,13 +16,13 @@ public class ApplicationController {
     }
     @FXML
     protected void onCsvBtnClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        welcomeText.setText("Reading CSV file");
         FileManager.readCSVFile();
         table.start(new Stage());
     }
     @FXML
     protected void onJsonBtnClick() {
-        welcomeText.setText("Welcome to JavaFX Application!");
+        welcomeText.setText("Reading JSON file");
         FileManager.readJsonFile();
         table.start(new Stage());
     }
