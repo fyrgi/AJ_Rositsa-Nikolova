@@ -2,6 +2,11 @@
 Uppgift 2 , Grit Academy Malmö, Java23, Rositsa Nikolova
 
 This code is part of learning process. 
+
+Keep in mind that removing the files from src/Files and trying to use the buttons Read CSV, Read JSON or Read XML will cause errors. 
+The code does not do verification on the entering fields because of missing specifications for expected values, formats osv.
+Idially a check meeting the criteria for each read value should be implemented but that is outside the scope of the task and thus missing from the provided specifications.
+
 In this code you can find ideas from other sources. These sources are written bellow: 
 Print a table after reading a file: https://forums.oracle.com/ords/apexds/post/creating-columns-dynamically-6981
 Table: createColumn() method. 
