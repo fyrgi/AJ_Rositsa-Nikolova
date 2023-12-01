@@ -12,7 +12,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
@@ -29,11 +31,11 @@ public class Table{
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Read file");
-        //TODO write the filename
         final Label label = new Label(labelMessage());
         //TODO try to save a file
         Button saveBtn = new Button("Save");
         saveBtn.idProperty().setValue("saveFile");
+        saveBtn.setDisable(true);
         label.setFont(new Font("Arial", 20));
         table.getColumns().clear();
         table.setEditable(true); // Does not function because it is not implemented
@@ -48,6 +50,7 @@ public class Table{
                 for(Integer row: flaggedValues){
                     if(row==rows){
                         System.err.println("Values on row " + rows + " may contain error. Check with database team.");
+                        table.setBackground(Background.fill(Color.RED));
                     }
                 }
             }
