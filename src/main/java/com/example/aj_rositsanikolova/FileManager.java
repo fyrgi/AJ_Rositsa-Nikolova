@@ -113,7 +113,12 @@ public class FileManager {
                 JsonObject record = ja.get(i).asObject();
                 rows++;
                 for(int j = 0; j < columnFileValues.size(); j++){
-                    dataFileValues.add(String.valueOf(record.get(columnFileValues.get(j))));
+                    int lenght = (record.get(columnFileValues.get(j)).toString().length());
+                    if((record.get(columnFileValues.get(j)).toString().charAt(0) == '"' && (record.get(columnFileValues.get(j)).toString().charAt(lenght-1) == '"'))){
+                        dataFileValues.add(((record.get(columnFileValues.get(j)).toString().substring(1, lenght - 1))));
+                    } else {
+                        dataFileValues.add(String.valueOf(record.get(columnFileValues.get(j))));
+                    }
                 }
             }
         } catch (Exception e) {
