@@ -30,7 +30,7 @@ public class Table{
         Scene scene = new Scene(new Group());
         stage.setTitle("Read file");
         //TODO write the filename
-        final Label label = new Label("Reading file <FileName>");
+        final Label label = new Label(labelMessage());
         //TODO try to save a file
         Button saveBtn = new Button("Save");
         saveBtn.idProperty().setValue("saveFile");
@@ -99,6 +99,20 @@ public class Table{
             }
         });
         return column;
+    }
+
+    private String labelMessage(){
+        String fileName;
+        try{
+            fileName = FileManager.getUrlName();
+        } catch (NullPointerException ne){
+            fileName = "";
+        }
+        if(!fileName.isEmpty()){
+            return "Reading chosen file >> " + fileName;
+        } else {
+            return "Reading existing file";
+        }
     }
 }
 

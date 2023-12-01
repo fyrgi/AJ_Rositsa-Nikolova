@@ -10,7 +10,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
 
-    <Label fx:id="welcomeText" text="File reader system" />
+    <Label fx:id="informationText" text="File reader system" />
    <Button fx:id="csvBtn" mnemonicParsing="false" onAction="#onCsvBtnClick" prefHeight="28.0" prefWidth="74.0" text="Read CSV" />
    <Button fx:id="jsonBtn" mnemonicParsing="false" onAction="#onJsonBtnClick" text="Read JSON" />
    <Button onAction="#onXmlBtnClick" prefHeight="27.0" prefWidth="75.0" text="Read XML" fx:id="xmlBtn" />

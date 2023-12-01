@@ -3,10 +3,8 @@ package com.example.aj_rositsanikolova;
 import com.eclipsesource.json.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-//import org.w3c.dom.Document;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.*;
 import javax.xml.stream.XMLStreamException;
 import java.io.File;
@@ -23,7 +21,9 @@ public class FileManager {
     private static ArrayList<String> columnFileValues= new ArrayList<>(), dataFileValues = new ArrayList<>() ;
     private static Scanner scanner;
     private static int rows = 0;
+
     private static File url;
+
     public static void readFile(){
         String fileExtension = findExtension();
         switch (fileExtension){
@@ -33,16 +33,23 @@ public class FileManager {
             case "json":
                 readJsonFile();
                 break;
+            case "xml":
+                readXmlFile();
+                break;
             default:
-                System.out.println("Can not read file");
+                //I wanted to change the label, but it is not as trivial as it may look.
+                // I tried several approaches both here in this class and in the ApplicationController all of them not working
+                // and throwing a Cannot invoke "javafx.scene.control.Label.setText(String)" exception
+                System.out.println("Cannot read file");
                 break;
         }
     }
+    //All readTypeFile have the same logic. Find the columns from the first record, store them in an ArrayList of Strings
+    // then find all values corresponding to the column and store them in an ArrayList of Strings.
+    // The 2 array lists are used to read through the file in Table.java where every X amount of records corresponding
+    // to the amount of columns is a row in the table.
     public static void readCSVFile() {
-        flaggedValues.clear();
-        columnFileValues.clear();
-        dataFileValues.clear();
-        rows=0;
+        doClear();
         try {
             File file;
             if(url != null){
@@ -83,10 +90,7 @@ public class FileManager {
     }
 
     public static void readJsonFile() {
-        columnFileValues.clear();
-        dataFileValues.clear();
-        rows = 0;
-        flaggedValues.clear();
+        doClear();
         try {
             File file;
             if(url != null){
@@ -118,62 +122,50 @@ public class FileManager {
     }
 
     public static void readXmlFile(){
-        columnFileValues.clear();
-        dataFileValues.clear();
-        rows=0;
+        doClear();
         File file;
         if(url != null){
             file = new File(String.valueOf(url));
         } else {
             file = new File("src/Files/sample.xml");
         }
-
-        //TODO read XML?
-
-        // source https://stackoverflow.com/questions/61948901/java-get-tag-name-of-a-node
-        // special credits to https://youtu.be/2JH5YeQ68H8
         try{
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document doc = builder.parse(file);
             Element root = doc.getDocumentElement();
-
+            String nodeName = "";
             NodeList list = root.getChildNodes();
-            // Crazy way to get to the tagNames for the first record.
+            // A way to get to the tagNames for the first record.
+            // This might not work if the first record is not found on the same row as with sample.xml
             for(int j = 1; j < list.item(1).getChildNodes().getLength(); j+=2){
                 Node nodeArr = list.item(1).getChildNodes().item(j);
                 columnFileValues.add(nodeArr.getNodeName());
             }
-            for (int i = 0; i < list.getLength(); i++){
+
+            // find the node name manually and store it into a String. Brake from the loop the moment I have the name
+            for (int i = 1; i < list.getLength(); i+=2) {
                 Node node = list.item(i);
                 String[] findExtension = node.getNodeName().split(":");
-                // find the node name manual.
-                String nodeName = findExtension[0];
-                if(node.getNodeType() == Node.ELEMENT_NODE){
+                nodeName = findExtension[0];
+                if (!nodeName.isEmpty()) {
+                    break;
+                }
+            }
+            // now knowing the name of the Node, identical for all the records I create a new list where I will be finding the values
+            // using the column names as a TagName later to extract the text.
+            NodeList nList = doc.getElementsByTagName(nodeName);
+            for(int i = 0; i < nList.getLength(); i++){
+                Node nNode = nList.item(i);
+                if(nNode.getNodeType() == Node.ELEMENT_NODE){
+                    Element eElement = (Element) nNode;
                     for(int j = 0; j < columnFileValues.size(); j++){
-                        Element eElement = (Element) node;
-                        System.out.println("For "+columnFileValues.get(j)+ " we have "+ eElement.getAttribute(columnFileValues.get(j)));
+                        //System.out.println("Column "+columnFileValues.get(j)+" Value "+ eElement.getElementsByTagName(columnFileValues.get(j)).item(0).getTextContent());
+                        dataFileValues.add(eElement.getElementsByTagName(columnFileValues.get(j)).item(0).getTextContent());
                     }
                 }
+                rows++;
             }
-
-           /* for (int i = 0; i < list.getLength(); i++) {
-                Node node = list.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    for(int j = 1; j < list.item(1).getChildNodes().getLength(); j+=2){
-                        Node nodeArr = list.item(1).getChildNodes().item(j);
-                        columnFileValues.add(nodeArr.getNodeName());
-                    }
-                    String str = node.getTextContent();
-                    for(int j = 0; j < str.length(); j++){
-                        System.out.println("Char at "+j+" is "+ str.charAt(j));
-                    }
-                    dataFileValues.add(str);
-                }
-            }
-            for(String row : dataFileValues){
-            }*/
-
         } catch (ParserConfigurationException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
@@ -184,6 +176,7 @@ public class FileManager {
 
     }
     public static void onFileChosen(){
+        try{
         FileChooser fc = new FileChooser();
         fc.setInitialDirectory(new File("src")); //src znar kyde se namira / e za C
         fc.setTitle("Open file");
@@ -197,10 +190,15 @@ public class FileManager {
         if (selectedFile != null) {
             url = selectedFile;
             readFile();
+            //Creates a table even for files that are not CSV, JSON or XML. TODO can change it by removing the all files option :)
             Table table = new Table();
             table.start(new Stage());
             url = null;
         }
+        } catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+
     }
     public void saveFile(File url){
         String ex = findExtension();
@@ -212,7 +210,15 @@ public class FileManager {
         String[] dots = url.getName().split("\\.");
         return url.getName().split("\\.")[dots.length-1];
     }
-
+    public static String getUrlName() {
+        return url.getName();
+    }
+    private static void doClear(){
+        columnFileValues.clear();
+        dataFileValues.clear();
+        flaggedValues.clear();
+        rows = 0;
+    }
     public static ArrayList<Integer> getFlaggedValues() {
         return flaggedValues;
     }
@@ -228,4 +234,5 @@ public class FileManager {
     public static int getRows() {
         return rows;
     }
+
 }
