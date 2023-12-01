@@ -47,7 +47,7 @@ public class Table{
             if(!flaggedValues.isEmpty()){
                 for(Integer row: flaggedValues){
                     if(row==rows){
-                        System.err.println("Syvpadenie na red " + rows);
+                        System.err.println("Values on row " + rows + " may contain error. Check with database team.");
                     }
                 }
             }
