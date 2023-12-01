@@ -1,4 +1,4 @@
-# AJ_Rositsa-Nikolova
+# Avancerad-java-Objektifiera-Rositsa-Nikolova
 Uppgift 2 , Grit Academy Malmö, Java23, Rositsa Nikolova
 
 This code is part of learning process. 
