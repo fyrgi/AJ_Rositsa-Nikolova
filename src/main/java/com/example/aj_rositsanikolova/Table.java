@@ -1,5 +1,4 @@
 package com.example.aj_rositsanikolova;
-import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ObservableValue;
@@ -12,13 +11,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Callback;
-
 import java.util.ArrayList;
 
 public class Table{
@@ -28,6 +27,7 @@ public class Table{
     private ArrayList<String> rowData = FileManager.getDataFileValues();
     private ArrayList<Integer> flaggedValues = FileManager.getFlaggedValues();
 
+    //Create the new scene manually. Create the table by using the two arrays. Columns is as it is but rowData goes into an Observable list.
     public void start(Stage stage) {
         Scene scene = new Scene(new Group());
         stage.setTitle("Read file");
@@ -88,6 +88,9 @@ public class Table{
         else
             title = columnName;
         column.setText(title);
+        // Makes the cells in right now all the columns editable. It does not rewrite the file and it has no extra checks about values added.
+        column.setCellFactory(TextFieldTableCell.forTableColumn());
+
         // How this row works is a mystery. I understand that withing the declaration it overrides
         column.setCellValueFactory(
                 new Callback<TableColumn.CellDataFeatures<ObservableList<StringProperty>, String>
@@ -117,5 +120,6 @@ public class Table{
             return "Reading existing file";
         }
     }
+
 }
 

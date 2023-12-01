@@ -6,14 +6,11 @@ import javafx.stage.Stage;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 import javax.xml.parsers.*;
-import javax.xml.stream.XMLStreamException;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-
-//import static com.example.aj_rositsanikolova.HelloApplication.scene;
 
 
 public class FileManager {
@@ -81,7 +78,7 @@ public class FileManager {
             }
             scanner.close();
             for(int i = 0; i < cols; i++){
-                columnFileValues.add(dataFileValues.get(i));
+                columnFileValues.add(dataFileValues.get(0));
                 dataFileValues.remove(0);
             }
         } catch (Exception e) {
@@ -180,6 +177,7 @@ public class FileManager {
         }
 
     }
+
     public static void onFileChosen(){
         try{
         FileChooser fc = new FileChooser();
@@ -205,6 +203,7 @@ public class FileManager {
         }
 
     }
+
     public void saveFile(File url){
         String ex = findExtension();
         FileChooser fc = new FileChooser();
@@ -215,15 +214,18 @@ public class FileManager {
         String[] dots = url.getName().split("\\.");
         return url.getName().split("\\.")[dots.length-1];
     }
+
     public static String getUrlName() {
         return url.getName();
     }
+
     private static void doClear(){
         columnFileValues.clear();
         dataFileValues.clear();
         flaggedValues.clear();
         rows = 0;
     }
+
     public static ArrayList<Integer> getFlaggedValues() {
         return flaggedValues;
     }

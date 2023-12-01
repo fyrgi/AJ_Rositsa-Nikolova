@@ -1,13 +1,8 @@
 package com.example.aj_rositsanikolova;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
-import javafx.scene.layout.Background;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 public class ApplicationController {
 
@@ -41,13 +36,6 @@ public class ApplicationController {
         Table table = new Table();
         table.start(new Stage());
     }
-    @FXML
-    public void writeErrorOnFileLoad() {
 
-    }
-    public void setInformationText(String message) {
-        informationText.setText(message);
-        informationText.setBackground(Background.fill(Color.RED));
-    }
 
 }
